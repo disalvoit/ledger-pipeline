@@ -1,0 +1,13 @@
+{
+  "name": "ledger-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A CSV -> ledger pipeline whose reported revenue is silently wrong.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
