@@ -5,7 +5,11 @@
  * @returns {number} Minor units (cents), e.g. 1999.
  */
 export function toMinorUnits(amount) {
-  return Math.trunc(Number(amount) * 100);
+  // Round instead of truncating: binary floating point makes decimal
+  // values like 4.35 multiply to 434.999..., and truncating silently
+  // drops a cent. Every value with at most two decimals is within
+  // 0.5 minor unit of the exact product, so rounding recovers it.
+  return Math.round(Number(amount) * 100);
 }
 
 /**

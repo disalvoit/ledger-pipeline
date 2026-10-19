@@ -99,3 +99,23 @@ test("renderReport contains the formatted total", () => {
   assert.match(text, /75\.50/);
   assert.match(text, /accepted: 7/);
 });
+
+// Regression: RFC 4180 quoting + float-truncated money once made this
+// input report a short total and drop the quoted-comma orders entirely.
+const TRICKY = `id,sku,qty,unitPrice,date
+1,"ACME, INC.",2,19.99,2024-01-01
+2,"WIDGET ""PRO""",1,4.35,2024-01-02
+3,D,3,445.13,2024-01-03
+4,E,1,8.40,2024-01-04
+`;
+
+test("regression: quoted fields and float prices report exact totals", () => {
+  const report = buildReport(TRICKY);
+  assert.equal(report.rowsIn, 4);
+  assert.equal(report.accepted, 4);
+  assert.equal(report.rejected, 0);
+  // 2*1999 + 1*435 + 3*44513 + 1*840 = 138812
+  assert.equal(report.totalMinor, 138812);
+  assert.equal(report.totalFormatted, "1388.12");
+  assert.deepEqual(report.bySku, { "ACME, INC.": 3998, "WIDGET \"PRO\"": 435, D: 133539, E: 840 });
+});
