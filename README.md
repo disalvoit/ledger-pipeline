@@ -48,3 +48,9 @@ npm test
 ```
 
 Runs the test suite with `node --test`. No build step is required.
+
+## Held-out grade
+
+`held-out/ep5.test.mjs` is the suite the episode grades against — the tests the
+models never saw. Run it with `node --test held-out/`. On the shipped `main` it
+passes 5 of 17 checks.
